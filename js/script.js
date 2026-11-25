@@ -107,6 +107,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // 4. SCROLL REVEAL ANIMATIONS (INTERSECTION OBSERVER)
   // ─────────────────────────────────────────────────────────────
   const revealElements = document.querySelectorAll('.reveal-on-scroll');
+  document.documentElement.classList.add('js-ready');
+  // Safety net: never leave content hidden if the observer is slow or fails
+  setTimeout(() => revealElements.forEach(el => el.classList.add('is-visible')), 2500);
 
   if ('IntersectionObserver' in window) {
     const revealObserver = new IntersectionObserver((entries, observer) => {
@@ -199,7 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
       overview: 'An AI-powered social media automation system that automatically handles incoming comments on Instagram and Facebook. It processes user comments and generates intelligent, context-aware replies to improve customer engagement and automate social media interactions.',
       problem: 'Businesses managing active Instagram and Facebook accounts receive high volumes of comments that require timely and relevant responses. Manually monitoring and replying to every comment is time-consuming and difficult to scale.',
       features: [
-        'Real-time monitoring and capture of incoming Instagram and Facebook comments via webhooks',
+        'Monitoring and capture of incoming Instagram and Facebook comments via webhooks',
         'AI Agent powered processing that analyzes each comment and generates context-aware replies',
         'Separate parallel workflows for Instagram and Facebook, each with dedicated AI agent flows',
         'Memory and conversation context storage using Supabase for maintaining interaction history',
@@ -223,7 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'Automated content scheduling and publishing for Instagram and Facebook',
         'Native support for both image posts and video content publishing',
         'Centralized workflow orchestration connecting content sources to social channels',
-        'Execution status tracking and instant failure notifications'
+        'Execution status tracking and failure notifications'
       ],
       role: 'Designed and built the automation workflow connecting content sources with social media platforms, managing scheduling, publishing, execution tracking, and failure notifications.',
       challenge: 'Different platforms have different publishing rules, supported formats, permissions, and API requirements.',
@@ -242,7 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'Direct connection between AI assistant and live Shopify store catalog',
         'Automated product information retrieval and variant lookup',
         'Store order verification and status synchronization',
-        'Real-time inquiry resolution with human fallback logic'
+        'Inquiry handling with human fallback logic'
       ],
       role: 'Connected Shopify with the automation workflow and configured the AI assistant to use product and order information when handling customer interactions.',
       challenge: 'Product information, inventory availability, and order states change frequently, requiring high accuracy.',
@@ -279,7 +282,7 @@ document.addEventListener('DOMContentLoaded', () => {
       features: [
         'Automated synchronization with Google Drive documents and knowledge files',
         'Text extraction, chunking, and vector embedding generation',
-        'High-speed vector similarity search using Pinecone Vector Store',
+        'Vector similarity search using Pinecone Vector Store',
         'AI Chat Agent delivering context-grounded answers without hallucinations'
       ],
       role: 'Built the end-to-end RAG pipeline connecting Google Drive to Pinecone and integrated the conversational AI agent for contextual knowledge retrieval.',
@@ -296,16 +299,141 @@ document.addEventListener('DOMContentLoaded', () => {
       overview: 'An Instagram-based dental clinic automation system that processes incoming messages, handles voice transcription, uses an AI agent, and manages responses and data through integrations.',
       problem: 'Dental clinics receive patient inquiries around the clock via Instagram messages and voice notes, leading to delayed replies and lost appointment opportunities.',
       features: [
-        'Real-time ingestion of Instagram direct messages and inquiries',
+        'Ingestion of Instagram direct messages and inquiries',
         'Automated voice note transcription for incoming audio messages',
         'Conversational AI Agent for patient guidance and appointment intake',
-        'Data integration with clinic scheduling systems and instant team alerts'
+        'Data integration with clinic scheduling systems and team alerts'
       ],
       role: 'Engineered the Instagram messaging webhook pipeline, voice audio transcription workflow, AI agent conversational flow, and appointment data sync.',
       challenge: 'Handling unstructured voice notes and preventing appointment conflicts with the doctor availability schedule.',
-      solution: 'Integrated automated voice transcription before passing text to the AI agent, and connected real-time availability checks to confirm appointments accurately.',
+      solution: 'Integrated automated voice transcription before passing text to the AI agent, and connected availability checks to confirm appointments accurately.',
       technologies: ['n8n', 'Instagram Messaging', 'Voice Transcription', 'AI Agent', 'Google Calendar', 'Appointment Integration']
-    }
+    },
+    'proj-6': {
+      "id": "proj-6",
+      "index": "PROJECT 07",
+      "title": "E-commerce Order Bot + Stock Alerts",
+      "domain": "Tested Demo: E-commerce",
+      "image": "public/images/projects/demo1-workflow.png",
+      "overview": "A tested demo, not a client project. It runs as a real n8n workflow against a local simulated backend with synthetic data, and passes 8 automated checks.",
+      "problem": "Shoppers keep asking where their order is, and low stock is usually noticed after an item has already sold out.",
+      "features": [
+            "Looks up an order and replies with the carrier and ETA, or says the order was not found",
+            "Asks for the order number when the message has none",
+            "A second branch checks inventory and alerts on items at or below their reorder level, including items at zero"
+      ],
+      "role": "Built the workflow and a small local mock backend, wrote the checks and ran them with the n8n CLI.",
+      "challenge": "Messages are messy: wrong order numbers, no number at all, items sitting exactly on the reorder level.",
+      "solution": "Each of those cases has its own branch and its own test, so the 8 checks cover not-found, missing number, exact reorder level and out-of-stock.",
+      "technologies": [
+            "n8n",
+            "HTTP Request",
+            "Code",
+            "IF Branch",
+            "Mock Backend"
+      ]
+},
+    'proj-7': {
+      "id": "proj-7",
+      "index": "PROJECT 08",
+      "title": "Support Ticket Triage Workflow",
+      "domain": "Tested Demo: Support",
+      "image": "public/images/projects/demo2-workflow.png",
+      "overview": "A tested demo, not a client project. It runs as a real n8n workflow against a local simulated backend with synthetic data, and passes 9 automated checks.",
+      "problem": "Every ticket lands in one queue, so an outage can sit behind a feedback request until someone reads the whole list.",
+      "features": [
+            "Sorts tickets into outage, billing, account and feedback",
+            "Sets priority P1 to P4",
+            "Flags repeats as duplicates and marks empty tickets as needing more information",
+            "Pages the on-call person for P1 only"
+      ],
+      "role": "Built the workflow and a small local mock backend, wrote the checks and ran them with the n8n CLI.",
+      "challenge": "Paging too often trains people to ignore the page, and duplicates must not create new alerts.",
+      "solution": "Only P1 reaches the paging step, duplicates are linked to the original ticket, and the 9 checks prove exactly one page goes out. The rules are simple keyword rules that a real client would replace with their own.",
+      "technologies": [
+            "n8n",
+            "HTTP Request",
+            "Code",
+            "IF Branch",
+            "Mock Backend"
+      ]
+},
+    'proj-8': {
+      "id": "proj-8",
+      "index": "PROJECT 09",
+      "title": "Real-Estate Lead Qualifier",
+      "domain": "Tested Demo: Real Estate",
+      "image": "public/images/projects/demo3-workflow.png",
+      "overview": "A tested demo, not a client project. It runs as a real n8n workflow against a local simulated backend with synthetic data, and passes 9 automated checks.",
+      "problem": "Agents spend time on cold leads while hot ones wait, and two leads can end up booked into the same viewing slot.",
+      "features": [
+            "Scores each lead on budget, timeline and pre-approval into hot, warm or cold",
+            "Books hot leads into free viewing slots without double-booking",
+            "Puts leads on a waitlist when slots run out and rejects leads with no email",
+            "Writes every lead to a CRM and sends confirmations only for booked viewings"
+      ],
+      "role": "Built the workflow and a small local mock backend, wrote the checks and ran them with the n8n CLI.",
+      "challenge": "The booking step must never use the same slot twice, and a full calendar must not lose the lead.",
+      "solution": "Slots are checked before each booking and leads with no free slot go to a waitlist. The 9 checks cover double-booking, a full calendar and the missing-email case. Scoring rules are illustrative.",
+      "technologies": [
+            "n8n",
+            "HTTP Request",
+            "Code",
+            "CRM Write (mock)",
+            "Mock Backend"
+      ]
+},
+    'proj-9': {
+      "id": "proj-9",
+      "index": "PROJECT 10",
+      "title": "Invoice Extraction to Sheet",
+      "domain": "Tested Demo: Finance Ops",
+      "image": "public/images/projects/demo4-workflow.png",
+      "overview": "A tested demo, not a client project. It runs as a real n8n workflow against a local simulated backend with synthetic data, and passes 8 automated checks.",
+      "problem": "Typing invoice details into a spreadsheet by hand is slow, and a wrong total or a duplicate invoice number is easy to miss.",
+      "features": [
+            "Extracts vendor, invoice number, date, line items, tax and total from invoice text",
+            "Checks that the numbers add up",
+            "Appends valid invoices to a spreadsheet",
+            "Sends wrong totals, duplicates, missing fields and non-invoice emails to a review queue",
+            "Reads plain text only, no OCR for scans"
+      ],
+      "role": "Built the workflow and a small local mock backend, wrote the checks and ran them with the n8n CLI.",
+      "challenge": "A bad invoice should never reach the sheet silently.",
+      "solution": "Every invoice is validated first. Only clean ones are appended, everything else goes to a review queue, and the 8 checks cover each rejection reason.",
+      "technologies": [
+            "n8n",
+            "HTTP Request",
+            "Code",
+            "Spreadsheet Write (mock)",
+            "Mock Backend"
+      ]
+},
+    'proj-10': {
+      "id": "proj-10",
+      "index": "PROJECT 11",
+      "title": "Daily Sales Report + Drop Alert",
+      "domain": "Tested Demo: Reporting",
+      "image": "public/images/projects/demo5-workflow.png",
+      "overview": "A tested demo, not a client project. It runs as a real n8n workflow against a local simulated backend with synthetic data, and passes 8 automated checks.",
+      "problem": "Owners want one number every morning and a warning when sales fall, without opening the shop dashboard.",
+      "features": [
+            "Leaves refunded orders out of revenue",
+            "Reports revenue, order count, average order value and top products",
+            "Shows the change versus the day before",
+            "Posts one summary message and alerts when revenue drops by more than 30%"
+      ],
+      "role": "Built the workflow and a small local mock backend, wrote the checks and ran them with the n8n CLI.",
+      "challenge": "Refunds distort revenue if counted, and the alert should fire only on a real drop.",
+      "solution": "Refunded orders are filtered before any totals, the drop is computed against the previous day, and the 8 checks cover refunds, the comparison and the 30% threshold.",
+      "technologies": [
+            "n8n",
+            "HTTP Request",
+            "Code",
+            "IF Branch",
+            "Mock Backend"
+      ]
+}
   };
 
   const modalOverlay = document.getElementById('projectModal');
